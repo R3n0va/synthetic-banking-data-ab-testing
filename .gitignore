@@ -1,0 +1,30 @@
+# Local configuration
+.env
+
+# Virtual environment
+.venv/
+
+# Generated source populations and experiment datasets
+data/source/**/*.csv
+data/experiments/**/*.csv
+!data/source/.gitkeep
+!data/experiments/.gitkeep
+
+# Generated analytical outputs
+results/**/*.csv
+results/**/*.png
+!results/.gitkeep
+!results/README.md
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,78 @@
+project:
+  alpha: 0.05
+  target_power: 0.80
+  expected_treatment_share: 0.50
+  confidence_level: 0.95
+  bootstrap_resamples: 2000
+
+experiments:
+  EXP-01:
+    slug: fx_spread_discount
+    name: Live FX spread discount
+    random_seed: 20261729
+    source_file: data/source/exp_01_fx_spread_population.csv
+    output_file: data/experiments/exp_01_fx_spread_discount.csv
+    sql_file: sql/01_fx_spread_discount/01_eligible_population.sql
+    sample_cap: 50000
+    strata:
+      - segment_code
+      - dominant_channel_code
+    pre_period_days: 90
+    experiment_days: 30
+    primary_metric: outcome_revenue_usd
+    primary_metric_label: Revenue per assigned customer
+    continuous_mde_standardised: 0.04
+    treatment:
+      spread_discount_relative: 0.08
+      transaction_frequency_lift_relative: 0.05
+      ticket_size_lift_relative: 0.00
+    simulation:
+      ticket_noise_sigma: 0.30
+      revenue_noise_sigma: 0.08
+
+  EXP-02:
+    slug: dcd_cross_sell
+    name: DCD cross-sell outreach
+    random_seed: 20262729
+    source_file: data/source/exp_02_dcd_cross_sell_population.csv
+    output_file: data/experiments/exp_02_dcd_cross_sell.csv
+    sql_file: sql/02_dcd_cross_sell/01_eligible_population.sql
+    sample_cap: 40000
+    strata:
+      - segment_code
+    pre_period_days: 180
+    experiment_days: 45
+    primary_metric: outcome_dcd_conversion
+    primary_metric_label: DCD conversion rate
+    proportion_mde_absolute: 0.015
+    fx_revenue_guardrail_relative_floor: -0.02
+    treatment:
+      conversion_lift_absolute: 0.015
+    simulation:
+      propensity_log_revenue_weight: 0.25
+      fee_log_sigma: 0.65
+      fx_revenue_noise_sigma: 0.25
+
+  EXP-03:
+    slug: digital_channel_migration
+    name: Digital channel migration
+    random_seed: 20263729
+    source_file: data/source/exp_03_digital_migration_population.csv
+    output_file: data/experiments/exp_03_digital_channel_migration.csv
+    sql_file: sql/03_digital_channel_migration/01_eligible_population.sql
+    sample_cap: 50000
+    strata:
+      - segment_code
+      - dominant_assisted_channel_code
+    pre_period_days: 90
+    experiment_days: 90
+    primary_metric: outcome_digital_adoption
+    primary_metric_label: Digital adoption rate
+    proportion_mde_absolute: 0.030
+    revenue_guardrail_relative_floor: -0.02
+    treatment:
+      digital_adoption_lift_absolute: 0.040
+      transaction_frequency_lift_relative: 0.010
+    simulation:
+      propensity_log_transactions_weight: 0.20
+      revenue_noise_sigma: 0.25
